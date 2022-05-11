@@ -1,0 +1,30 @@
+.linear-equations-solver {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+}
+
+.equation-input {
+    display: flex;
+    padding: 0 1rem;
+    background: #e9e9e9;
+    border-radius: 10px;
+    width: 25rem;
+    border: 2px solid #ccc;
+}
+
+.mq-root-block {
+    padding: 0.5rem !important;
+}
+
+.mq-math-mode .mq-supsub.mq-sup-only {
+    vertical-align: 0.3rem !important;
+}
+
+.solving-steps p {
+    font-family: Symbola, "Times New Roman", serif;
+    font-size: 20px;
+    font-weight: 500;
+}

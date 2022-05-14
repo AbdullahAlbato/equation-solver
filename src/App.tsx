@@ -46,7 +46,7 @@ function App() {
       <div className="page-header">
         <h2>Solve Linear Equations</h2>
       </div>
-      <Box sx={{ bgcolor: 'background.paper', width: '95%', margin: '0 auto' }}>
+      <Box sx={{ bgcolor: 'background.paper', width: '100%', margin: '0 auto' }}>
         <AppBar position="static">
           <Tabs
             value={value}
@@ -56,15 +56,15 @@ function App() {
             variant="fullWidth"
             aria-label="full width tabs example"
           >
-            <Tab label="One Variable" {...a11yProps(0)} />
-            <Tab label="Multiple Variables" {...a11yProps(1)} />
+            {/* <Tab label="One Variable" {...a11yProps(0)} /> */}
+            <Tab label="First Degree Equation" {...a11yProps(0)} />
           </Tabs>
         </AppBar>
 
-        <TabPanel value={value} index={0} dir="ltr">
+        {/* <TabPanel value={value} index={0} dir="ltr">
           <LinearEquationsSolver type="OneVariable" />
-        </TabPanel>
-        <TabPanel value={value} index={1} dir="ltr">
+        </TabPanel> */}
+        <TabPanel value={value} index={0} dir="ltr">
           <LinearEquationsSolver type="MultipleVariables" />
         </TabPanel>
 

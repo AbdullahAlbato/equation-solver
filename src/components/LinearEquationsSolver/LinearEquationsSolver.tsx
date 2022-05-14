@@ -15,6 +15,8 @@ function LinearEquationsSolver({ type }: IProps) {
   const [y, setY] = useState(0);
   const [a, setA] = useState(2);
   const [b, setB] = useState(2);
+  const [points, setPoints] = useState<Point2[]>([]);
+
 
   const [equation, setEquation] = useState("5x + 2 = 3x + 6");
   const axesGridRef = useRef<AxesGrid | null>(null);
@@ -83,6 +85,7 @@ function LinearEquationsSolver({ type }: IProps) {
       const newY: string = y.replace('x', '*' + x);
       points.push({ x: x, y: eval(newY) });
     })
+    setPoints(points);
     return points;
   }
   const iOSBoxShadow =
@@ -143,12 +146,37 @@ function LinearEquationsSolver({ type }: IProps) {
   const handleBSliderChange = (event: Event | React.SyntheticEvent<Element, Event>, value: number | number[]) => {
     setB(+value);
   };
-  // solve('1/5x + 2/15 = 1/7x + 4');
+  const PointsTable = () => {
+    const pointList = points.map((point: Point2, index) =>
+      <div className="row" key={index}>
+        <div className="cell">
+          {point.x}
+        </div>
+        <div className="cell">
+          {point.y}
+        </div>
+      </div>
+    );
+    return (
+      <div className="table">
+
+        <div className="row header blue">
+          <div className="cell">
+            x
+          </div>
+          <div className="cell">
+            y = {a}x + {b}
+          </div>
+        </div>
+        {pointList}
+      </div >
+    )
+  }
   return (
     <Box className="linear-equations-solver">
-      <Card>
+      <Card sx={{ width: '28%', minHeight: '84vh', marginRight: '2%' }}>
         <CardContent sx={{ textAlign: 'center' }}>
-          {type === 'OneVariable' &&
+          {/* {type === 'OneVariable' &&
             <Typography component="div" className="equation-input">
               <EquationEditor
                 value={equation}
@@ -157,9 +185,9 @@ function LinearEquationsSolver({ type }: IProps) {
                 autoOperatorNames="sin cos tan"
               />
             </Typography>
-          }
+          } */}
           {type === 'MultipleVariables' &&
-            <Typography component="div" sx={{ width: '20rem' }}>
+            <Typography component="div" sx={{ width: '100%' }}>
               <p>Y = ax + b</p>
               <p>Y = {a}x + {b}</p>
               <Typography component="div" sx={{ display: 'flex', justifyContent: 'center' }}>
@@ -191,26 +219,25 @@ function LinearEquationsSolver({ type }: IProps) {
                   />
                 </Typography>
               </Typography>
-
+              <PointsTable />
             </Typography>
           }
           {/* <Button variant="contained" color="warning" sx={{ marginTop: '1rem' }} onClick={() => solve(equation)}>Solve</Button> */}
         </CardContent>
       </Card>
-      {type === 'OneVariable' &&
+      {/* {type === 'OneVariable' &&
         <Card className="solving-steps" sx={{ width: '29.2rem', marginTop: '2rem' }}>
           <CardContent>
             <Typography component="p">{equation}</Typography>
             <Typography component="p">x = {x}</Typography>
           </CardContent>
         </Card>
-      }
-      <Card sx={{ marginTop: '2rem' }}>
+      } */}
+      <Card sx={{ width: '70%' }}>
         <CardContent>
           <Typography component="div" className="axes-grid">
             <AxesGrid xPoint={x} yPoint={0} ref={axesGridRef} />
           </Typography>
-
         </CardContent>
       </Card>
     </Box>

@@ -2,7 +2,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
+    /* flex-direction: column; */
     width: 100%;
 }
 
@@ -27,4 +27,37 @@
     font-family: Symbola, "Times New Roman", serif;
     font-size: 20px;
     font-weight: 500;
+}
+
+.table {
+    margin: 2rem 0 0 0;
+    width: 100%;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    display: table;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.row {
+    display: table-row;
+    background: #f6f6f6;
+}
+
+.row:nth-of-type(odd) {
+    background: #e9e9e9;
+}
+
+.row.header {
+    font-weight: 900;
+    color: #ffffff;
+    background: #ea6153;
+}
+
+.row.blue {
+    background: #2980b9;
+}
+
+.cell {
+    padding: 6px 12px;
+    display: table-cell;
 }

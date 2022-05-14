@@ -1,4 +1,5 @@
 
+import { Chip } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
@@ -56,61 +57,13 @@ class AxesGrid extends React.Component<IProps, IState> {
 
 
         var axes = new THREE.AxesHelper(50);
-        axes.setColors(new THREE.Color('rgb(255, 0, 0)'), new THREE.Color('rgb(0, 0, 255)'), new THREE.Color('rgb(0, 0, 0)'))
-
-        // var textGeo = new TextGeometry('Y', {
-        //     size: 5,
-        //     height: 2,
-        //     curveSegments: 6,
-        //     font: "helvetiker",
-        //     style: "normal"
-        // });
-
-        // var color = new THREE.Color();
-        // color.setRGB(255, 250, 250);
-        // var textMaterial = new THREE.MeshBasicMaterial({ color: color });
-        // var text = new THREE.Mesh(textGeo, textMaterial);
-
-        // const position = axes.geometry.attributes.position;
-
-
-        // // Position of first axis
-        // text.position.x = position.getX(1);
-        // text.position.y = position.getY(1);
-        // text.position.z = position.getZ(1);
-        // //    text.position.x = axis.geometry.vertices[1].x;
-        // //    text.position.y = axis.geometry.vertices[1].y;
-        // //    text.position.z = axis.geometry.vertices[1].z;
-        // text.rotation = this.camera.rotation;
-        // this.scene.add(text);
-
-        // Axes label
-        // var loader = new FontLoader();
-        // loader.load('./fonts.json', (font) => {
-        //     console.log(font)
-        //     const textGeo = new TextGeometry('Example label', {
-        //         font: font,
-        //         size: 15,
-        //         height: 5,
-        //         curveSegments: 10,
-        //     });
-
-        //     var color = new THREE.Color();
-        //     const position = axes.geometry.attributes.position;
-        //     color.setRGB(255, 0, 0);
-        //     const textMaterial = new THREE.MeshBasicMaterial({ color: color });
-        //     const meshText = new THREE.Mesh(textGeo, textMaterial);
-
-        //     // Position of first axis
-        //     meshText.position.x = position.getX(1);
-        //     meshText.position.y = position.getY(1);
-        //     meshText.position.z = position.getZ(1);
-
-        //     // meshText.rotation = this.camera.rotation;
-        //     this.scene.add(meshText);
-
-        // });
-
+        // axes.setColors(new THREE.Color('rgb(255, 0, 0)'), new THREE.Color('rgb(0, 0, 255)'), new THREE.Color('rgb(0, 0, 0)'))
+        // Add X axes arrow to grid
+        this.addArrowHelper(new THREE.Vector3(1, 0, 0), this.axesGridSize + 10, new THREE.Color('rgb(0, 0, 255)'));
+        // Add Y axes arrow to grid
+        this.addArrowHelper(new THREE.Vector3(0, 1, 0), this.axesGridSize + 10, new THREE.Color('rgb(0, 128, 0)'));
+        // Add Z axes arrow to grid
+        this.addArrowHelper(new THREE.Vector3(0, 0, 1), this.axesGridSize + 10, new THREE.Color('rgb(0, 0, 0)'));
         this.scene.add(axes);
         this.addGridXY();
         this.addGridXZ();
@@ -122,7 +75,16 @@ class AxesGrid extends React.Component<IProps, IState> {
         //start animation
         this.start();
     }
-
+    addArrowHelper(dir: THREE.Vector3, length: number, color: THREE.ColorRepresentation) {
+        dir.normalize();
+        const origin = new THREE.Vector3(0, 0, 0);
+        const arrowHelper = new THREE.ArrowHelper(dir, origin, length, color, 4, 3);
+        arrowHelper.line.material = new THREE.LineBasicMaterial({
+            color: color,
+            linewidth: 2
+        });
+        this.scene.add(arrowHelper)
+    }
     drawingOneVariable(x: number) {
         this.updateGrid(x);
         this.addLineOnXAxes(x, "rgb(255,0,0)");
@@ -146,8 +108,6 @@ class AxesGrid extends React.Component<IProps, IState> {
         const material = new THREE.LineBasicMaterial({
             color: '#999',
             linewidth: 1,
-            // linecap: 'square', //ignored by WebGLRenderer
-            // linejoin: 'miter' //ignored by WebGLRenderer
         });
         this.gridXY.material = material;
         this.gridXY.translateX(this.axesGridSize / 2);
@@ -177,14 +137,10 @@ class AxesGrid extends React.Component<IProps, IState> {
     updateGrid(xPoint: number) {
         if (xPoint > 5) {
             this.gridDivisions = (xPoint * 2) + 2;
-            console.log('gridDivisions', this.gridDivisions)
-            console.log('before remove', this.scene)
-
             this.pointStep = this.axesGridSize / this.gridDivisions;
             this.removeSceneChildByName('axisXY');
             this.removeSceneChildByName('axisXZ');
             this.removeSceneChildByName('axisYZ');
-            console.log('after remove', this.scene)
             this.addGridXY();
             this.addGridXZ();
             this.addGridYZ();
@@ -254,15 +210,9 @@ class AxesGrid extends React.Component<IProps, IState> {
         const newPoints: any[] = [];
         points.forEach((point) => {
             newPoints.push(new THREE.Vector3(point.x * this.pointStep, point.y * this.pointStep, 0));
-
         })
-        // points.push(new THREE.Vector3(x * this.pointStep, 0, 0));
-        // points.push(new THREE.Vector3(x * this.pointStep, this.axesGridSize, 0));
         const geometry = new THREE.BufferGeometry().setFromPoints(newPoints);
         const line = new THREE.Line(geometry, material);
-        line.translateX(+this.axesGridSize / 2);
-        // line.translateZ(-);
-
         this.scene.add(line);
         this.renderScene();
     }
@@ -302,16 +252,22 @@ class AxesGrid extends React.Component<IProps, IState> {
         });
 
         this.renderScene();
-        console.log('clearAxesGrid')
     }
     render() {
         return (
-            <div
-                style={{ width: "85vw", height: "75vh", padding: 5 }}
-                ref={mount => {
-                    this.mount = mount;
-                }}
-            />
+            <>
+                <div>
+                    <Chip label="X Axis" sx={{ backgroundColor: 'rgb(0,0,255)', color: '#fff', marginRight: '.3rem' }} />
+                    <Chip label="Y Axis" sx={{ backgroundColor: 'rgb(0,128,0)', color: '#fff', marginRight: '.3rem' }} />
+                    <Chip label="Z Axis" sx={{ backgroundColor: 'rgb(0,0,0)', color: '#fff' }} />
+                </div>
+                <div
+                    style={{ width: "100%", height: "75vh", padding: 5 }}
+                    ref={mount => {
+                        this.mount = mount;
+                    }}
+                />
+            </>
         );
     }
 }

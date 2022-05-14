@@ -174,7 +174,7 @@ function LinearEquationsSolver({ type }: IProps) {
   }
   return (
     <Box className="linear-equations-solver">
-      <Card sx={{ width: '28%', minHeight: '84vh', marginRight: '2%' }}>
+      <Card sx={{ width: '28%', minHeight: '90vh', marginRight: '2%' }}>
         <CardContent sx={{ textAlign: 'center' }}>
           {/* {type === 'OneVariable' &&
             <Typography component="div" className="equation-input">

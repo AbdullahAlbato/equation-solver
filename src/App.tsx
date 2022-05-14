@@ -10,9 +10,8 @@ interface TabPanelProps {
 }
 function TabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
-
   return (
-    <div
+    <Box
       role="tabpanel"
       className='tab-panel'
       hidden={value !== index}
@@ -22,10 +21,10 @@ function TabPanel(props: TabPanelProps) {
     >
       {value === index && (
         <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
+          {children}
         </Box>
       )}
-    </div>
+    </Box>
   );
 }
 
@@ -63,10 +62,10 @@ function App() {
         </AppBar>
 
         <TabPanel value={value} index={0} dir="ltr">
-          <LinearEquationsSolver />
+          <LinearEquationsSolver type="OneVariable" />
         </TabPanel>
         <TabPanel value={value} index={1} dir="ltr">
-
+          <LinearEquationsSolver type="MultipleVariables" />
         </TabPanel>
 
       </Box>

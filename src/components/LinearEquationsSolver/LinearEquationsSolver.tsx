@@ -1,70 +1,219 @@
-import React, { useRef, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import AxesGrid from '../AxesGrid/AxesGrid';
 import './LinearEquationsSolver.css';
 import algebra from 'algebra.js';
 import EquationEditor from 'equation-editor-react';
-import { Button, Card, CardContent } from '@mui/material';
-function LinearEquationsSolver() {
+import { Box, Button, Card, CardContent, styled, Typography } from '@mui/material';
+import { Point2 } from '../../models/Point2';
+import Slider from '@mui/material/Slider';
+
+type IProps = {
+  type: string;
+}
+function LinearEquationsSolver({ type }: IProps) {
   const [x, setX] = useState(0);
-  const [gridIsShow, setGridIsShow] = useState(false);
+  const [y, setY] = useState(0);
+  const [a, setA] = useState(2);
+  const [b, setB] = useState(2);
+
   const [equation, setEquation] = useState("5x + 2 = 3x + 6");
+  const axesGridRef = useRef<AxesGrid | null>(null);
 
-  console.log(equation);
-  const solve = (equationValue: string): number => {
+  useEffect(() => {
+    if (type === 'OneVariable') solveOneVariable(equation)
+    else if (type === 'MultipleVariables') solveMultipleVariables(equation);
+  }, [equation]);
+
+  useEffect(() => {
+    if (type === 'MultipleVariables') setEquation(`y=${a}x+${b}`);
+  }, [a, b]);
+
+  const solveOneVariable = (equationValue: string): void => {
+    if (axesGridRef.current) {
+      axesGridRef.current.clearAxesGrid();
+    }
     const exp: string[] = equationValue.split('=');
-    const exp1: any = algebra.parse(exp[0]);
-    const exp2: any = algebra.parse(exp[1]);
-    const equation = new algebra.Equation(exp1, exp2);
+    try {
+      const exp1: any = algebra.parse(exp[0]);
+      const exp2: any = algebra.parse(exp[1]);
+      const equation = new algebra.Equation(exp1, exp2);
 
-    console.log(equation.toString());
+      console.log(equation.toString());
 
-    const answer: any = equation.solveFor("x");
+      const answer: any = equation.solveFor("x");
 
-    console.log("x = " + answer);
-    setGridIsShow(true);
-    return +answer;
+      console.log("x = " + answer);
+      setX(+answer);
+      axesGridRef.current?.drawingOneVariable(+answer);
+    }
+    catch (ex) {
+    }
+
   }
-  const onChangeEquationEditor = (value: string) => {
-    setEquation(value);
-    setGridIsShow(false);
+  const solveMultipleVariables = (equationValue: string): void => {
+    if (axesGridRef.current) {
+      axesGridRef.current.clearAxesGrid();
+    }
+    const exp: string[] = equationValue.split('=');
+    try {
+      const exp1: any = algebra.parse(exp[0]);
+      const exp2: any = algebra.parse(exp[1]);
+      const equation = new algebra.Equation(exp1, exp2);
+
+      console.log(equation.toString());
+
+      const xAnswer: any = equation.solveFor("x");
+      const yAnswer: any = equation.solveFor("y");
+
+
+      console.log("x = " + xAnswer);
+      console.log("y = " + yAnswer);
+      setX(+xAnswer);
+      setY(+yAnswer);
+      axesGridRef.current?.drawingMultipleVariables(getPointsFromEquation(yAnswer.toString()));
+    }
+    catch (ex) {
+    }
+
   }
+  const getPointsFromEquation = (y: string): Point2[] => {
+    const points: Point2[] = [];
+    const xPoints = [-2, -1, 0, 1, 2];
+    xPoints.forEach((x) => {
+      const newY: string = y.replace('x', '*' + x);
+      points.push({ x: x, y: eval(newY) });
+    })
+    return points;
+  }
+  const iOSBoxShadow =
+    '0 3px 1px rgba(0,0,0,0.1),0 4px 8px rgba(0,0,0,0.13),0 0 0 1px rgba(0,0,0,0.02)';
+
+  const IOSSlider = styled(Slider)(({ theme }) => ({
+    color: theme.palette.mode === 'dark' ? '#3880ff' : '#3880ff',
+    height: 2,
+    padding: '15px 0',
+    '& .MuiSlider-thumb': {
+      height: 28,
+      width: 28,
+      backgroundColor: '#fff',
+      boxShadow: iOSBoxShadow,
+      '&:focus, &:hover, &.Mui-active': {
+        boxShadow:
+          '0 3px 1px rgba(0,0,0,0.1),0 4px 8px rgba(0,0,0,0.3),0 0 0 1px rgba(0,0,0,0.02)',
+        // Reset on touch devices, it doesn't add specificity
+        '@media (hover: none)': {
+          boxShadow: iOSBoxShadow,
+        },
+      },
+    },
+    '& .MuiSlider-valueLabel': {
+      fontSize: 12,
+      fontWeight: 'normal',
+      top: -6,
+      backgroundColor: 'unset',
+      color: theme.palette.text.primary,
+      '&:before': {
+        display: 'none',
+      },
+      '& *': {
+        background: 'transparent',
+        color: theme.palette.mode === 'dark' ? '#fff' : '#000',
+      },
+    },
+    '& .MuiSlider-track': {
+      border: 'none',
+    },
+    '& .MuiSlider-rail': {
+      opacity: 0.5,
+      backgroundColor: '#bfbfbf',
+    },
+    '& .MuiSlider-mark': {
+      backgroundColor: '#bfbfbf',
+      height: 8,
+      width: 1,
+      '&.MuiSlider-markActive': {
+        opacity: 1,
+        backgroundColor: 'currentColor',
+      },
+    },
+  }));
+  const handleASliderChange = (event: Event | React.SyntheticEvent<Element, Event>, value: number | number[]) => {
+    setA(+value);
+  };
+  const handleBSliderChange = (event: Event | React.SyntheticEvent<Element, Event>, value: number | number[]) => {
+    setB(+value);
+  };
   // solve('1/5x + 2/15 = 1/7x + 4');
   return (
-    <div className="linear-equations-solver">
+    <Box className="linear-equations-solver">
       <Card>
         <CardContent sx={{ textAlign: 'center' }}>
-          <div className="equation-input">
-            <EquationEditor
-              value={equation}
-              onChange={onChangeEquationEditor}
-              autoCommands="pi theta sqrt sum prod alpha beta gamma rho"
-              autoOperatorNames="sin cos tan"
-            />
-          </div>
-          <Button variant="contained" color="warning" sx={{ marginTop: '1rem' }} onClick={() => setX(solve(equation))}>Solve</Button>
-        </CardContent>
+          {type === 'OneVariable' &&
+            <Typography component="div" className="equation-input">
+              <EquationEditor
+                value={equation}
+                onChange={setEquation}
+                autoCommands="pi theta sqrt sum prod alpha beta gamma rho"
+                autoOperatorNames="sin cos tan"
+              />
+            </Typography>
+          }
+          {type === 'MultipleVariables' &&
+            <Typography component="div" sx={{ width: '20rem' }}>
+              <p>Y = ax + b</p>
+              <p>Y = {a}x + {b}</p>
+              <Typography component="div" sx={{ display: 'flex', justifyContent: 'center' }}>
+                <Typography component="div" sx={{ width: '50%' }}>
+                  <Typography gutterBottom sx={{ marginBottom: '2rem', color: '#cb0d0d', fontWeight: 'bold' }}>a</Typography>
+                  <IOSSlider
+                    onChangeCommitted={handleASliderChange}
+                    aria-label="ios slider"
+                    defaultValue={60}
+                    value={a}
+                    min={1}
+                    max={10}
+                    //  marks={marks}
+                    valueLabelDisplay="on"
+                  />
 
+                </Typography>
+                <Typography component="div" sx={{ width: '50%' }}>
+                  <Typography gutterBottom sx={{ marginBottom: '2rem', color: '#cb0d0d', fontWeight: 'bold' }}>b</Typography>
+                  <IOSSlider
+                    onChangeCommitted={handleBSliderChange}
+                    aria-label="ios slider"
+                    defaultValue={60}
+                    value={b}
+                    min={1}
+                    max={10}
+                    //  marks={marks}
+                    valueLabelDisplay="on"
+                  />
+                </Typography>
+              </Typography>
+
+            </Typography>
+          }
+          {/* <Button variant="contained" color="warning" sx={{ marginTop: '1rem' }} onClick={() => solve(equation)}>Solve</Button> */}
+        </CardContent>
       </Card>
-      {gridIsShow &&
+      {type === 'OneVariable' &&
         <Card className="solving-steps" sx={{ width: '29.2rem', marginTop: '2rem' }}>
           <CardContent>
-            <p>{equation}</p>
-            <p>x = {x}</p>
+            <Typography component="p">{equation}</Typography>
+            <Typography component="p">x = {x}</Typography>
           </CardContent>
         </Card>
       }
-      {gridIsShow &&
-        <Card sx={{ marginTop: '2rem' }}>
-          <CardContent>
-            <div className="axes-grid">
-              <AxesGrid xPoint={x} yPoint={0} />
-            </div>
+      <Card sx={{ marginTop: '2rem' }}>
+        <CardContent>
+          <Typography component="div" className="axes-grid">
+            <AxesGrid xPoint={x} yPoint={0} ref={axesGridRef} />
+          </Typography>
 
-          </CardContent>
-        </Card>
-      }
-
-    </div>
+        </CardContent>
+      </Card>
+    </Box>
   );
 }
 

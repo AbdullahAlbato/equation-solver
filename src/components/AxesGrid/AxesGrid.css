@@ -1,0 +1,7 @@
+.label {
+    color: rgb(250, 9, 9);
+    font-family: sans-serif;
+    padding: 2px;
+    background: rgba(0, 0, 0, .6);
+    font-size: 18px;
+}

@@ -1,21 +1,15 @@
 {
   "files": {
-    "main.css": "/equation-solver/static/css/main.ab617667.css",
-    "main.js": "/equation-solver/static/js/main.c279c9e5.js",
+    "main.css": "/equation-solver/static/css/main.ffa37270.css",
+    "main.js": "/equation-solver/static/js/main.11262642.js",
     "static/js/787.936dafbd.chunk.js": "/equation-solver/static/js/787.936dafbd.chunk.js",
-    "static/media/Symbola.svg": "/equation-solver/static/media/Symbola.191c327f0aef5505dabc.svg",
-    "static/media/Symbola.otf": "/equation-solver/static/media/Symbola.b0c85dd4bda9eef9f78a.otf",
-    "static/media/Symbola.eot": "/equation-solver/static/media/Symbola.482c0b923751f14bb9d3.eot",
-    "static/media/Symbola.ttf": "/equation-solver/static/media/Symbola.9ab231eefb8c56f6ef5d.ttf",
-    "static/media/Symbola.woff": "/equation-solver/static/media/Symbola.c2f28720e1e7cecfecd4.woff",
-    "static/media/Symbola.woff2": "/equation-solver/static/media/Symbola.52e7ce77729712a06423.woff2",
     "index.html": "/equation-solver/index.html",
-    "main.ab617667.css.map": "/equation-solver/static/css/main.ab617667.css.map",
-    "main.c279c9e5.js.map": "/equation-solver/static/js/main.c279c9e5.js.map",
+    "main.ffa37270.css.map": "/equation-solver/static/css/main.ffa37270.css.map",
+    "main.11262642.js.map": "/equation-solver/static/js/main.11262642.js.map",
     "787.936dafbd.chunk.js.map": "/equation-solver/static/js/787.936dafbd.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.ab617667.css",
-    "static/js/main.c279c9e5.js"
+    "static/css/main.ffa37270.css",
+    "static/js/main.11262642.js"
   ]
 }

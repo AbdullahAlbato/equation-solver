@@ -82,7 +82,7 @@ function LinearEquationsSolver({ type }: IProps) {
     const points: Point2[] = [];
     const xPoints = [-2, -1, 0, 1, 2];
     xPoints.forEach((x) => {
-      const newY: string = y.replace('x', '*' + x);
+      const newY: string = a === 1 ? y.replace('x', String(x)) : y.replace('x', '*' + x);
       points.push({ x: x, y: eval(newY) });
     })
     setPoints(points);

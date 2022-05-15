@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/equation-solver/static/css/main.ffa37270.css",
-    "main.js": "/equation-solver/static/js/main.11262642.js",
+    "main.js": "/equation-solver/static/js/main.842d89af.js",
     "static/js/787.936dafbd.chunk.js": "/equation-solver/static/js/787.936dafbd.chunk.js",
     "index.html": "/equation-solver/index.html",
     "main.ffa37270.css.map": "/equation-solver/static/css/main.ffa37270.css.map",
-    "main.11262642.js.map": "/equation-solver/static/js/main.11262642.js.map",
+    "main.842d89af.js.map": "/equation-solver/static/js/main.842d89af.js.map",
     "787.936dafbd.chunk.js.map": "/equation-solver/static/js/787.936dafbd.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.ffa37270.css",
-    "static/js/main.11262642.js"
+    "static/js/main.842d89af.js"
   ]
 }
